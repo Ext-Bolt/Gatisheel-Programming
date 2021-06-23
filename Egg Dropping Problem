@@ -1,0 +1,18 @@
+int static dp[201][201]={-1};
+
+int eggDrop(int n, int k) 
+    {
+        if(k==0 ||k==1) {return k;}
+        if(n==1)    { return k; }
+        if(dp[n][k]!=0)
+        {
+            return dp[n][k];
+        }
+        int mn=INT_MAX;
+        for(int i=1;i<=k;i++)
+        {
+            int temp=1+max(eggDrop(n-1,i-1),eggDrop(n,k-i));
+            mn=min(mn,temp);
+        }
+        return dp[n][k]=mn;
+    }
