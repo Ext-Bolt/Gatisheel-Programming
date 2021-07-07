@@ -1,0 +1,14 @@
+ll carAssembly(int a[][NUM_STATION],int t[][NUM_STATION],int *e,int *x)
+{
+    int first=e[0]+a[0][0];
+    int second=e[1]+a[1][0];
+    loop(i,1,NUM_STATION-1)
+    {
+        int up=min(first+a[0][i],second+t[1][i]+a[0][i]);
+        int down=min(first+t[0][i]+a[1][i],second+a[1][i]);
+        
+        first=up;
+        second=down;
+    }
+    return min(first+x[0],second + x[1]);
+}
