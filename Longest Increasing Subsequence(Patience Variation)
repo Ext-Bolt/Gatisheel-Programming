@@ -1,0 +1,40 @@
+int CeilIndex(vector<int > &v,int l,int r,int val)
+    {
+        while((r-l)>1)  {
+        int m=l +(r-l)/2;
+            if(v[m]>=val)
+            {
+                r=m;
+            }
+            else
+            {
+                l=m;
+            }
+        }
+        return r;
+    }
+    
+    int longestSubsequence(int n, int v[])
+    {
+        if(n==0)    {  return 0;  }
+        vector<int> t(n, 0);
+        int length=1;
+        t[0]=v[0];
+        for(int i=1;i<n;i++)
+        {
+            if(v[i]<t[0])
+            {
+                t[0]=v[i];
+            }
+            else if(v[i]>t[length-1])
+            {
+                t[length++]=v[i];
+            }
+            else
+            {
+                t[CeilIndex(t, -1, length - 1, v[i])] = v[i];
+            }
+        }
+        return length;
+        
+    }
