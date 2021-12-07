@@ -1,0 +1,54 @@
+int static dp[201][201][2];
+
+int solve(string S,int i,int j,bool istrue) {
+        if(i>j) { return false; }  
+        if(dp[i][j][istrue] != -1)  {
+            return dp[i][j][istrue];
+        }
+        if(i==j)    {
+            if(istrue  == true) {
+                return (S[i] == 'T');
+            }
+            else {
+                return (S[i] == 'F');
+            }
+        }
+        int ans=0;
+        for(int k = i+1;k<=j;k++)   {
+            int LT = solve(S,i,k-1,true);
+            int LF = solve(S,i,k-1,false);
+            int RT = solve(S,k+1,j,true);
+            int RF = solve(S,k+1,j,false);
+            
+            if(S[k] == '&') {
+                if(istrue == true)  {
+                    ans = ((LT*RT)%1003 + (ans)%1003)%1003;
+                }
+                else    {
+                    ans = (ans%1003 + (LF*RT)%1003 + (LT*RF)%1003 + (LF*RF)%1003)%1003;
+                }
+            }
+            else if(S[k] == '|')    {
+                if(istrue == true)  {
+                    ans = (ans%1003 + (RT*LF)%1003 + (RT*LT)%1003 + (RF*LT)%1003)%1003;
+                }
+                else    {
+                    ans = (ans%1003 + (RF*LF)%1003)%1003;
+                }
+            }
+            else if(S[k] == '^')    {
+                if(istrue == true)  {
+                    ans = (ans%1003 + (RT*LF)%1003 + (LT*RF)%1003)%1003;
+                }
+                else    {
+                    ans = (ans%1003 + (RT*LT)%1003 + (RF*LF)%1003)%1003;
+                }
+            }
+        }
+        return dp[i][j][istrue] = ans;
+    }
+
+    int countWays(int N, string S){
+        memset(dp,-1,sizeof(dp));
+        return solve(S,0,N-1,true);
+    }
