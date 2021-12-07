@@ -1,18 +1,38 @@
-int static dp[201][201]={-1};
+int dp[201][201];
 
-int eggDrop(int n, int k) 
+    
+    int eggDrop1(int e, int f) 
     {
-        if(k==0 ||k==1) {return k;}
-        if(n==1)    { return k; }
-        if(dp[n][k]!=0)
-        {
-            return dp[n][k];
+        if(f==1 || f==0)    {
+            return f;
         }
-        int mn=INT_MAX;
-        for(int i=1;i<=k;i++)
-        {
-            int temp=1+max(eggDrop(n-1,i-1),eggDrop(n,k-i));
-            mn=min(mn,temp);
+        if(e==1)  {
+            return f;
         }
-        return dp[n][k]=mn;
+        int mn = INT_MAX;
+        for(int k=1;k<=f;k++)   {
+            int up,down;
+            if(dp[e-1][k-1] !=-1)   {
+                down = dp[e-1][k-1];
+            }
+            else    {
+                down = eggDrop1(e-1,k-1);
+                dp[e-1][k-1] = down;
+            }
+            if(dp[e][f-k] != -1)    {
+                up = dp[e][f-k];
+            }
+            else    {
+                up = eggDrop1(e,f-k);
+                dp[e][f-k] = up;
+            }
+            int temp = 1 + max(down,up);
+            mn = min(mn,temp);
+        }
+        return dp[e][f] = mn;
+    }
+    
+    int eggDrop(int n,int k)    {
+        memset(dp,-1,sizeof(dp));
+        return  eggDrop1(n,k);
     }
