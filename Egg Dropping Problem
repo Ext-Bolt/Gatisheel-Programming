@@ -36,3 +36,49 @@ int dp[201][201];
         memset(dp,-1,sizeof(dp));
         return  eggDrop1(n,k);
     }
+    
+    //Ultra optimised version
+    
+    int t[101][10001];
+    
+    int helper(int K, int N) {
+        if(K <= 1 || N <= 1) {
+            return N;
+        }
+        
+        if(t[K][N] != -1) {
+            return t[K][N];
+        }
+        
+        int mn = INT_MAX;
+        int low = 1;
+        int high = N;
+        while(low < high) {
+            int mid = low+((high - low)/2);
+            int a, b;
+            if(t[K-1][mid-1] != -1) {
+                a = t[K-1][mid-1];
+            }
+            else {
+                a = helper(K-1, mid-1);
+            }
+            if(t[K][N-mid] != -1) {
+                b = t[K][N-mid];
+            }
+            else {
+                b = helper(K, N-mid);
+            }
+            int temp = 1 + max(a, b);
+            mn = min(mn, temp);
+            if (a == b) break;
+		    else if (a < b) low = mid + 1;
+		    else high = mid;
+        }
+        t[K][N] = mn;
+        return mn;
+    }
+    
+     int superEggDrop(int k, int n) {
+        memset(t, -1, sizeof(t));
+         return helper(k, n);
+    }
