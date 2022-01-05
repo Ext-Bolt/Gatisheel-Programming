@@ -1,0 +1,9 @@
+int maximizeTheCuts(int n, int x, int y, int z)
+    {
+       int dp[n+1];
+       dp[0] = 0;
+       for(int i = 1;i<=n;i++)  {
+           dp[i] = max({(i>=x) ? dp[i-x] + 1 : INT_MIN,(i>=y) ? dp[i-y] + 1 : INT_MIN , (i>=z) ? dp[i-z] + 1 : INT_MIN});
+       }
+       return (dp[n]<0) ? 0 : dp[n] ;
+    }
